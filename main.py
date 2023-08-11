@@ -1,4 +1,6 @@
 # External libraries
+import uvicorn
+
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 
@@ -21,4 +23,4 @@ def home():
 
 
 if __name__ == '__main__':
-    print(Paths.root)
+    uvicorn.run(app, port=5000)

@@ -1,10 +1,23 @@
-[
-    {
-        "id": 1,
+{
+    "eeb241de-4e67-4488-95b4-cb6243aa77cd": {
         "title": "Avatar",
         "overview": "En un exuberante planeta llamado Pandora viven los Na'vi",
         "year": "2009",
         "rating": 7.8,
-        "category": "Acción"    
-    } 
-]
+        "category": "Acción"
+    },
+    "87a8e3c8-3024-49a1-b1a5-51adb5a08e57": {
+        "title": "Chucky",
+        "overview": "Es un muñeco malo",
+        "year": "2007",
+        "rating": 9.0,
+        "category": "Terror"
+    },
+    "6ba7b810-9dad-11d1-80b4-00c04fd430c8": {
+        "title": "Terrifier",
+        "overview": "Payaso asesino",
+        "year": "2022",
+        "rating": 5.2,
+        "category": "Terror"
+    }
+}
