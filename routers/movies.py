@@ -9,8 +9,8 @@ from fastapi import status
 
 # Own libraries
 from db.db import data_movies
-from metadata.tags import Tags
 from parsers.movie import Movie
+from python.metadata.tags import Tags
 
 
 movies_router = APIRouter(

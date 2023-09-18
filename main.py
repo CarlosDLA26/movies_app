@@ -5,8 +5,9 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 
 # Own libraries
-from metadata.tags import Tags
-from metadata.paths import Paths
+from python.metadata.tags import Tags
+from python.paths import Paths
+from routers.auth import auth_router
 from routers.movies import movies_router
 
 
@@ -14,6 +15,7 @@ app = FastAPI()
 app.title = 'API Películas'
 
 app.include_router(movies_router)
+app.include_router(auth_router)
 
 
 @app.get('/', tags=[Tags.HOME.value])
