@@ -2,6 +2,7 @@
 import uuid
 
 from fastapi import APIRouter
+from fastapi import Depends
 from fastapi.responses import JSONResponse
 from fastapi import Path
 from fastapi import Query
@@ -9,12 +10,13 @@ from fastapi import status
 
 # Own libraries
 from db.db import data_movies
+from parsers.authorization import JWTBearer
 from parsers.movie import Movie
 from python.metadata.tags import Tags
 
 
 movies_router = APIRouter(
-    prefix='/movies', 
+    prefix='/movies',
     tags=[Tags.MOVIE.value]
 )
 
@@ -22,7 +24,9 @@ movies_router = APIRouter(
 @movies_router.get(
     '',
     response_model=dict[str, Movie],
-    status_code=status.HTTP_200_OK)
+    status_code=status.HTTP_200_OK,
+    dependencies=[
+        Depends(JWTBearer())])
 def get_movies():
     return data_movies
 
