@@ -21,6 +21,7 @@ class MovieDB(Base):
     budget = Column(Integer)
     original_language = Column(String(150))
     overview = Column(String(1200))
+    year = Column(Integer)
     vote_average = Column(Float(2))
     vote_count = Column(Integer)
     runtime = Column(Integer)

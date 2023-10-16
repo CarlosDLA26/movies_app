@@ -4,21 +4,25 @@ from pydantic import BaseModel
 from pydantic import Field
 
 
-class Movie(BaseModel):
+class MovieBase(BaseModel):
     title: str = Field(min_length=1, max_length=50)
-    overview: str = Field(min_length=10, max_length=100)
+    adult: bool = Field(default=False)
+    budget: int = Field(ge=0)
+    original_language: str = Field(min_length=1, max_length=150)
+    overview: str = Field(min_length=10, max_length=1200)
     year: int = Field(ge=0, le=date.today().year)
-    rating: float = Field(ge=0, le=10.0)
-    # TODO: Agregar un enum que tenga todos las posibles categorias de películas
-    category: str = Field(min_length=1, max_length=50)
+    vote_average: float = Field(ge=0.0, le=10.0)
+    vote_count: int = Field(gt=0)
+    runtime: int = Field(gt=0)
+    production_countries: str = Field(min_length=1, max_length=50)
+    genres: list
 
-    class Config:
-        json_schema_extra = {
-            'example': {
-                'title': 'Título de ejemplo',
-                'overview': 'Resumen de película',
-                'year': 2017,
-                'rating': 9.5,
-                'category': 'Acción'
-            }
-        }
+
+class MovieCreate(MovieBase):
+    # TODO: Agregar clase config de ejemplo
+    id: int
+
+
+class Movie(MovieBase):
+    # TODO: Agregar clase config de ejemplo
+    pass
