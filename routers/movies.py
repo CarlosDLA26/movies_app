@@ -9,7 +9,7 @@ from fastapi import Query
 from fastapi import status
 
 # Own libraries
-from db.db import data_movies
+from db import data_movies
 from parsers.authorization import JWTBearer
 from parsers.movie import Movie
 from python.metadata.tags import Tags
