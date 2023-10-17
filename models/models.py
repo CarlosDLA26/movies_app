@@ -1,9 +1,8 @@
 # External libreries
-from sqlalchemy import Boolean
-from sqlalchemy import Column
 from sqlalchemy import Float
 from sqlalchemy import ForeignKey
-from sqlalchemy import Integer
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy import String
 
@@ -15,17 +14,17 @@ class MovieDB(Base):
 
     __tablename__ = 'movies'
 
-    id = Column(Integer, primary_key=True)
-    title = Column(String(150))
-    adult = Column(Boolean, default=False)
-    budget = Column(Integer)
-    original_language = Column(String(150))
-    overview = Column(String(1200))
-    year = Column(Integer)
-    vote_average = Column(Float(2))
-    vote_count = Column(Integer)
-    runtime = Column(Integer)
-    production_countries = Column(String(50))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(String(150), nullable=False)
+    adult: Mapped[bool] = mapped_column(default=False, nullable=False)
+    budget: Mapped[int] = mapped_column()
+    original_language: Mapped[str] = mapped_column(String(150), nullable=False)
+    overview: Mapped[str] = mapped_column(String(1200), nullable=False)
+    year: Mapped[int] = mapped_column(nullable=False)
+    vote_average: Mapped[float] = mapped_column(Float(2))
+    vote_count: Mapped[int] = mapped_column()
+    runtime: Mapped[int] = mapped_column(nullable=False)
+    production_countries: Mapped[str] = mapped_column(String(50))
 
     genres = relationship('MovieGenreDB', back_populates='movie')
 
@@ -34,8 +33,8 @@ class GenreDB(Base):
 
     __tablename__ = 'genres'
 
-    id = Column(Integer, primary_key=True)
-    type_gen = Column(String(30))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    type_gen: Mapped[str] = mapped_column(String(30), nullable=False)
 
     movies = relationship('MovieGenreDB', 'genre')
 
@@ -44,8 +43,9 @@ class MovieGenreDB(Base):
 
     __tablename__ = 'movies_genres'
 
-    movie_id = Column(Integer, ForeignKey('movies.id'))
-    genre_id = Column(Integer, ForeignKey('genres.id'))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    movie_id: Mapped[int] = mapped_column(ForeignKey('movies.id'), nullable=False)
+    genre_id: Mapped[int] = mapped_column(ForeignKey('genres.id'), nullable=False)
 
     movie = relationship('MovieDB', back_populates='genres')
     genre = relationship('GenreDB', back_populates='movies')
