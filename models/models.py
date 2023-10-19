@@ -20,7 +20,7 @@ class MovieDB(Base):
     budget: Mapped[int] = mapped_column()
     original_language: Mapped[str] = mapped_column(String(150), nullable=False)
     overview: Mapped[str] = mapped_column(String(1200), nullable=False)
-    year: Mapped[int] = mapped_column(nullable=False)
+    release_date: Mapped[str] = mapped_column(String(10), nullable=False)
     vote_average: Mapped[float] = mapped_column(Float(2))
     vote_count: Mapped[int] = mapped_column()
     runtime: Mapped[int] = mapped_column(nullable=False)

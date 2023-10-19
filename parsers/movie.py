@@ -10,7 +10,7 @@ class MovieBase(BaseModel):
     budget: int = Field(ge=0)
     original_language: str = Field(min_length=1, max_length=150)
     overview: str = Field(min_length=10, max_length=1200)
-    year: int = Field(ge=0, le=date.today().year)
+    release_date: str = Field(min_length=10, max_length=10)
     vote_average: float = Field(ge=0.0, le=10.0)
     vote_count: int = Field(gt=0)
     runtime: int = Field(gt=0)
