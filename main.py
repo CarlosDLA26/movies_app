@@ -5,6 +5,9 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 
 # Own libraries
+from db import Base
+from db import engine
+from models.models import *
 from python.metadata.tags import Tags
 from python.paths import Paths
 from routers.auth import auth_router
@@ -25,4 +28,5 @@ def home():
 
 
 if __name__ == '__main__':
+    Base.metadata.create_all(bind=engine)
     uvicorn.run(app, port=5000)

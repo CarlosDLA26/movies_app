@@ -11,7 +11,7 @@ class GenreBase(BaseModel):
 
 class GenreCreate(GenreBase):
     # TODO: Agregar clase config de ejemplo
-    id: int
+    id: str
 
 
 class Genre(GenreBase):

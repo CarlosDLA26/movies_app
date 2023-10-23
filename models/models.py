@@ -14,7 +14,7 @@ class MovieDB(Base):
 
     __tablename__ = 'movies'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[str] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(150), nullable=False)
     adult: Mapped[bool] = mapped_column(default=False, nullable=False)
     budget: Mapped[int] = mapped_column()
@@ -33,7 +33,7 @@ class GenreDB(Base):
 
     __tablename__ = 'genres'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[str] = mapped_column(primary_key=True)
     type_gen: Mapped[str] = mapped_column(String(30), nullable=False)
 
     movies = relationship('MovieGenreDB', 'genre')
@@ -43,9 +43,9 @@ class MovieGenreDB(Base):
 
     __tablename__ = 'movies_genres'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    movie_id: Mapped[int] = mapped_column(ForeignKey('movies.id'), nullable=False)
-    genre_id: Mapped[int] = mapped_column(ForeignKey('genres.id'), nullable=False)
+    id: Mapped[str] = mapped_column(primary_key=True)
+    movie_id: Mapped[str] = mapped_column(ForeignKey('movies.id'), nullable=False)
+    genre_id: Mapped[str] = mapped_column(ForeignKey('genres.id'), nullable=False)
 
     movie = relationship('MovieDB', back_populates='genres')
     genre = relationship('GenreDB', back_populates='movies')

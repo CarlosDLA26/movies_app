@@ -20,7 +20,7 @@ class MovieBase(BaseModel):
 
 class MovieCreate(MovieBase):
     # TODO: Agregar clase config de ejemplo
-    id: int
+    id: str
 
 
 class Movie(MovieBase):
