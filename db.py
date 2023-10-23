@@ -1,13 +1,18 @@
 # External libraries
+from os import getenv
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Own libraries
-from config import SQLALCHEMY_DATABASE_URL
+from config import get_settings
+
+
+env = get_settings(getenv('ENV'))
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, echo=True,
+    env.SQLALCHEMY_DATABASE_URL, echo=True,
     connect_args={'check_same_thread': False})
 session_db = sessionmaker(autoflush=False, bind=engine)
 Base = declarative_base()

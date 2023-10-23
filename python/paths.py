@@ -15,6 +15,10 @@ class Paths:
     """Directorio con las configuraciones a las bases de datos
     """
 
-    database_movies = root / 'movies_app.sqlite'
-    """Archivo sqlite con los datos de las películas
+    database_movies_prod = database_dir / 'movies_app.sqlite'
+    """Archivo sqlite con los datos de las películas de producción
+    """
+
+    database_movies_test = database_dir / 'movies_app_test.sqlite'
+    """Archivo sqlite con los datos de las películas de pruebas
     """
