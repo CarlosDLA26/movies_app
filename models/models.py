@@ -28,6 +28,23 @@ class MovieDB(Base):
 
     genres = relationship('MovieGenreDB', back_populates='movie')
 
+    def get_response_model(self) -> dict:
+        res = {
+            'id': self.id,
+            'title': self.title,
+            'adult': self.adult,
+            'budget': self.budget,
+            'original_language': self.original_language,
+            'overview': self.overview,
+            'release_date': self.release_date,
+            'vote_average': self.vote_average,
+            'vote_count': self.vote_count,
+            'runtime': self.runtime,
+            'production_countries': self.production_countries,
+            'genres': [genre.genre_id for genre in self.genres]
+        }
+        return res
+
 
 class GenreDB(Base):
 
@@ -36,7 +53,7 @@ class GenreDB(Base):
     id: Mapped[str] = mapped_column(primary_key=True)
     type_gen: Mapped[str] = mapped_column(String(30), nullable=False)
 
-    movies = relationship('MovieGenreDB', 'genre')
+    movies = relationship('MovieGenreDB', back_populates='genre')
 
 
 class MovieGenreDB(Base):

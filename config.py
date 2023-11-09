@@ -10,17 +10,24 @@ class EnvSettings():
     SQLALCHEMY_DATABASE_URL: str
     """Ruta a la base de datos sqlite de películas"""
 
+    echo_db: bool
+    """True para generar logs en consola del código SQL que se ejecuta en
+    la base de datos sqlite, de lo contrario False"""
+
 
 class ProdConfig(EnvSettings):
     SQLALCHEMY_DATABASE_URL = f'sqlite:///{str(Paths.database_movies_prod)}'
+    echo_db = False
 
 
 class TestConfig(EnvSettings):
     SQLALCHEMY_DATABASE_URL = f'sqlite:///{str(Paths.database_movies_test)}'
+    echo_db = True
 
 
 class DevConfig(EnvSettings):
     SQLALCHEMY_DATABASE_URL = f'sqlite:///{str(Paths.database_movies_test)}'
+    echo_db = True
 
 
 @lru_cache()
@@ -44,7 +51,7 @@ def get_settings(env: Literal['dev', 'test', 'prod']) -> EnvSettings:
 
     modes = ['dev', 'test', 'prod']
     if env not in modes:
-        raise ValueError(f'El modo de despliegue debe ser alguno {modes}')
+        raise ValueError(f'El modo de despliegue dado {env} debe ser alguno {modes}')
 
     settings = {
         'dev': DevConfig,

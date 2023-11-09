@@ -12,7 +12,7 @@ from config import get_settings
 env = get_settings(getenv('ENV'))
 
 engine = create_engine(
-    env.SQLALCHEMY_DATABASE_URL, echo=True,
+    env.SQLALCHEMY_DATABASE_URL,
     connect_args={'check_same_thread': False})
-session_db = sessionmaker(autoflush=False, bind=engine)
+Session = sessionmaker(autoflush=False, bind=engine)
 Base = declarative_base()
