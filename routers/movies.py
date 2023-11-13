@@ -2,13 +2,14 @@
 import uuid
 
 from fastapi import APIRouter
-from fastapi import Depends
 from fastapi.responses import JSONResponse
 from fastapi import Path
-from fastapi import Query
 from fastapi import status
 from sqlalchemy import func
-from sqlalchemy import select, insert, update, delete
+from sqlalchemy import delete
+from sqlalchemy import insert
+from sqlalchemy import select
+from sqlalchemy import update
 from typing import List
 
 # Own libraries
@@ -71,7 +72,9 @@ def get_random_movies(num: int = 10) -> List[MovieCreate]:
 @movies_router.get(
     '/{id_movie}',
     status_code=status.HTTP_200_OK)
-def get_movie(id_movie: str) -> MovieCreate:
+def get_movie(
+        id_movie: str = Path(min_length=36, max_length=36)
+    ) -> MovieCreate:
 
     """Obtiene los datos de una película específica a partir de un id. En caso
     de no encontrar la película, devuelve una respuesta 404 o 400 en caso de
@@ -101,11 +104,6 @@ def get_movie(id_movie: str) -> MovieCreate:
             }
 
     """
-
-    if len(id_movie) != 36:
-        return JSONResponse(
-            content='Verifique que el id de la ciudad tenga un formato de uuid',
-            status_code=status.HTTP_400_BAD_REQUEST)
 
     session = Session()
     stmt = select(MovieDB).where(MovieDB.id == id_movie)
@@ -141,32 +139,67 @@ def post_movie(new_movie: Movie) -> MovieCreate:
         runtime=new_movie.runtime,
         production_countries=new_movie.production_countries
     )
-    res = session.execute(stmt)
+    session.execute(stmt)
     session.commit()
     # Se debe cerrar la sesión en la base de datos para evitar bloqueos
     session.close()
     return {**dict(new_movie), 'id': new_id}
 
 
-# @movies_router.put(
-#     '/put/{id_movie}',
-#     response_model=dict[str, Movie],
-#     status_code=status.HTTP_200_OK)
-# def put_movie(
-#         new_data_movie: Movie,
-#         id_movie: str = Path(min_length=36, max_length=36)):
-#     if id_movie not in data_movies.keys():
-#         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
-#     data_movies[id_movie] = new_data_movie.model_dump()
-#     return {id_movie: data_movies[id_movie]}
+@movies_router.put(
+    '/put/{id_movie}',
+    status_code=status.HTTP_200_OK)
+def put_movie(
+        new_data_movie: Movie,
+        id_movie: str = Path(min_length=36, max_length=36)
+    ) -> MovieCreate:
+
+    """Actualiza datos de un registro en la base de datos
+    """
+
+    session = Session()
+    stmt = select(MovieDB).where(MovieDB.id == id_movie)
+    res = session.execute(stmt).all()
+    if len(res) == 0:
+        return JSONResponse(
+            content='La película no se encuentra',
+            status_code=status.HTTP_404_NOT_FOUND)
+    stmt = update(MovieDB).where(MovieDB.id == id_movie).values(
+        title=new_data_movie.title,
+        adult=new_data_movie.adult,
+        budget=new_data_movie.budget,
+        original_language=new_data_movie.original_language,
+        overview=new_data_movie.overview,
+        release_date=new_data_movie.release_date,
+        vote_average=new_data_movie.vote_average,
+        vote_count=new_data_movie.vote_count,
+        runtime=new_data_movie.runtime,
+        production_countries=new_data_movie.production_countries
+    )
+    session.execute(stmt)
+    session.commit()
+    return res[0][0].get_response_model()
 
 
-# @movies_router.delete(
-#     '/delete/{id_movie}',
-#     response_model=dict[str, Movie],
-#     status_code=status.HTTP_200_OK)
-# def delete_movie(id_movie: str):
-#     if id_movie not in data_movies.keys():
-#         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
-#     del data_movies[id_movie]
-#     return data_movies
+@movies_router.delete(
+    '/delete/{id_movie}',
+    status_code=status.HTTP_200_OK)
+def delete_movie(id_movie: str) -> MovieCreate:
+
+    """Borra datos de un registro en la base de datos
+    """
+
+    session = Session()
+    stmt = select(MovieDB).where(MovieDB.id == id_movie)
+    res = session.execute(stmt).all()
+    if len(res) == 0:
+        return JSONResponse(
+            content='La película no se encuentra',
+            status_code=status.HTTP_404_NOT_FOUND)
+    # Se toman los datos antes de hacer commit para evitar un error al
+    # buscar datos borrados
+    data_movie = res[0][0].get_response_model()
+    stmt = delete(MovieDB).where(MovieDB.id == id_movie)
+    session.execute(stmt)
+    session.commit()
+    return data_movie
