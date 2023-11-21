@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse
 # Own libraries
 from db import Base
 from db import engine
+from middlewares.error_handler import ErrorHandler
 from models.models import *
 from python.metadata.tags import Tags
 from python.paths import Paths
@@ -23,6 +24,9 @@ app.title = 'API Películas'
 
 app.include_router(movies_router)
 app.include_router(auth_router)
+
+# middlewares
+app.add_middleware(ErrorHandler)
 
 
 @app.get('/', tags=[Tags.HOME.value])

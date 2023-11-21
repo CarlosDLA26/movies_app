@@ -65,7 +65,6 @@ def get_random_movies(num: int = 10) -> List[MovieCreate]:
     stmt = select(MovieDB).order_by(func.random()).limit(num)
     res = session.execute(stmt)
     response = [movie[0].get_response_model() for movie in res]
-    print(response)
     return response
 
 
